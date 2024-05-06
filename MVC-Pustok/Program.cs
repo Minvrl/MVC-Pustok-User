@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MVC_Pustok.Data;
+using MVC_Pustok.Models;
 using MVC_Pustok.Services;
 using System;
 
@@ -15,6 +17,14 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
+
+builder.Services.AddIdentity<AppUser, IdentityRole>(opt =>
+{
+    opt.Password.RequiredLength = 8;
+    opt.Password.RequireNonAlphanumeric = false;
+    opt.Password.RequireUppercase = false;
+}).AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
+
 
 builder.Services.AddScoped<LayoutService>();
 var app = builder.Build();
@@ -32,6 +42,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

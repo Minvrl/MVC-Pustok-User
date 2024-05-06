@@ -18,9 +18,6 @@ namespace MVC_Pustok.Migrations
                 name: "FK_Books_Genres_GenreId",
                 table: "Books");
 
-            migrationBuilder.DropColumn(
-                name: "ImageName",
-                table: "Sliders");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Title2",

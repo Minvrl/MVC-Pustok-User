@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVC_Pustok.Areas.Admin.ViewModels;
 using MVC_Pustok.Data;
@@ -6,6 +7,7 @@ using MVC_Pustok.Models;
 
 namespace MVC_Pustok.Areas.Admin.Controllers
 {
+    [Authorize]
     [Area("admin")]
     public class TagController : Controller
     {

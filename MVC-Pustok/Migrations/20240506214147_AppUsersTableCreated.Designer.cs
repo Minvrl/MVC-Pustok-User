@@ -4,6 +4,7 @@ using MVC_Pustok.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVC_Pustok.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240506214147_AppUsersTableCreated")]
+    partial class AppUsersTableCreated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +39,7 @@ namespace MVC_Pustok.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Authors", (string)null);
+                    b.ToTable("Authors");
                 });
 
             modelBuilder.Entity("MVC_Pustok.Models.Book", b =>
@@ -93,7 +96,7 @@ namespace MVC_Pustok.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("Books", (string)null);
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("MVC_Pustok.Models.BookImgs", b =>
@@ -125,7 +128,7 @@ namespace MVC_Pustok.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("BookImages", (string)null);
+                    b.ToTable("BookImages");
                 });
 
             modelBuilder.Entity("MVC_Pustok.Models.Booktags", b =>
@@ -154,7 +157,7 @@ namespace MVC_Pustok.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("BookTags", (string)null);
+                    b.ToTable("BookTags");
                 });
 
             modelBuilder.Entity("MVC_Pustok.Models.Feature", b =>
@@ -185,7 +188,7 @@ namespace MVC_Pustok.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Features", (string)null);
+                    b.ToTable("Features");
                 });
 
             modelBuilder.Entity("MVC_Pustok.Models.Genre", b =>
@@ -209,7 +212,7 @@ namespace MVC_Pustok.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres", (string)null);
+                    b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("MVC_Pustok.Models.Setting", b =>
@@ -224,7 +227,7 @@ namespace MVC_Pustok.Migrations
 
                     b.HasKey("Key");
 
-                    b.ToTable("Settings", (string)null);
+                    b.ToTable("Settings");
                 });
 
             modelBuilder.Entity("MVC_Pustok.Models.Slider", b =>
@@ -264,7 +267,7 @@ namespace MVC_Pustok.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sliders", (string)null);
+                    b.ToTable("Sliders");
                 });
 
             modelBuilder.Entity("MVC_Pustok.Models.Tag", b =>
@@ -287,7 +290,7 @@ namespace MVC_Pustok.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags", (string)null);
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
