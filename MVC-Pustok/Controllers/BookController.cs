@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVC_Pustok.Data;
 using MVC_Pustok.Models;
@@ -6,6 +7,7 @@ using MVC_Pustok.Models;
 
 namespace MVC_Pustok.Controllers
 {
+    [Authorize]
     public class BookController:Controller
     {
         private AppDbContext _context;

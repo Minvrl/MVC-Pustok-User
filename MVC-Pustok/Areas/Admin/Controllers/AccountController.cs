@@ -33,7 +33,7 @@ namespace MVC_Pustok.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(AdminViewModel logvm)
+        public async Task<IActionResult> Login(AdminViewModel logvm,string returnUrl)
         {
             AppUser admin = await _userManager.FindByNameAsync(logvm.UserName);
 
@@ -50,8 +50,8 @@ namespace MVC_Pustok.Areas.Admin.Controllers
                 ModelState.AddModelError("", "Username or password is incorrect !");
                 return View();
             }
-            return RedirectToAction("index", "dashboard");
-        }
+			return returnUrl != null ? Redirect(returnUrl) : RedirectToAction("index", "dashboard");
+		}
 
         public IActionResult GetName()
         {

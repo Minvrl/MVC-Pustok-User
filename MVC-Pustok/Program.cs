@@ -27,6 +27,23 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(opt =>
 
 
 builder.Services.AddScoped<LayoutService>();
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.ConfigureApplicationCookie(opt =>
+{
+    opt.Events.OnRedirectToLogin = opt.Events.OnRedirectToAccessDenied = context =>
+    {
+        if (context.Request.Path.Value.ToLower().StartsWith("/admin"))
+        {
+            var uri = new Uri(context.RedirectUri);
+            context.Response.Redirect("/admin/account/login" + uri.Query);
+        }
+        return Task.CompletedTask;
+    };
+
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
