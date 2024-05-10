@@ -205,116 +205,10 @@
                                         categories
                                     </a>
                                     <ul class="category-menu">
-                                        <li class="cat-item has-children">
-                                            <a href="#">Arts & Photography</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="#">Bags & Cases</a></li>
-                                                <li><a href="#">Binoculars & Scopes</a></li>
-                                                <li><a href="#">Digital Cameras</a></li>
-                                                <li><a href="#">Film Photography</a></li>
-                                                <li><a href="#">Lighting & Studio</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="cat-item has-children mega-menu">
-                                            <a href="#">Biographies</a>
-                                            <ul class="sub-menu">
-                                                <li class="single-block">
-                                                    <h3 class="title">WHEEL SIMULATORS</h3>
-                                                    <ul>
-                                                        <li><a href="#">Bags & Cases</a></li>
-                                                        <li><a href="#">Binoculars & Scopes</a></li>
-                                                        <li><a href="#">Digital Cameras</a></li>
-                                                        <li><a href="#">Film Photography</a></li>
-                                                        <li><a href="#">Lighting & Studio</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="single-block">
-                                                    <h3 class="title">WHEEL SIMULATORS</h3>
-                                                    <ul>
-                                                        <li><a href="#">Bags & Cases</a></li>
-                                                        <li><a href="#">Binoculars & Scopes</a></li>
-                                                        <li><a href="#">Digital Cameras</a></li>
-                                                        <li><a href="#">Film Photography</a></li>
-                                                        <li><a href="#">Lighting & Studio</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="single-block">
-                                                    <h3 class="title">WHEEL SIMULATORS</h3>
-                                                    <ul>
-                                                        <li><a href="#">Bags & Cases</a></li>
-                                                        <li><a href="#">Binoculars & Scopes</a></li>
-                                                        <li><a href="#">Digital Cameras</a></li>
-                                                        <li><a href="#">Film Photography</a></li>
-                                                        <li><a href="#">Lighting & Studio</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="single-block">
-                                                    <h3 class="title">WHEEL SIMULATORS</h3>
-                                                    <ul>
-                                                        <li><a href="#">Bags & Cases</a></li>
-                                                        <li><a href="#">Binoculars & Scopes</a></li>
-                                                        <li><a href="#">Digital Cameras</a></li>
-                                                        <li><a href="#">Film Photography</a></li>
-                                                        <li><a href="#">Lighting & Studio</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li class="cat-item has-children">
-                                            <a href="#">Business & Money</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="#">Brake Tools</a></li>
-                                                <li><a href="#">Driveshafts</a></li>
-                                                <li><a href="#">Emergency Brake</a></li>
-                                                <li><a href="#">Spools</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="cat-item has-children">
-                                            <a href="#">Calendars</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="#">Brake Tools</a></li>
-                                                <li><a href="#">Driveshafts</a></li>
-                                                <li><a href="#">Emergency Brake</a></li>
-                                                <li><a href="#">Spools</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="cat-item has-children">
-                                            <a href="#">Children's Books</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="#">Brake Tools</a></li>
-                                                <li><a href="#">Driveshafts</a></li>
-                                                <li><a href="#">Emergency Brake</a></li>
-                                                <li><a href="#">Spools</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="cat-item has-children">
-                                            <a href="#">Comics</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="#">Brake Tools</a></li>
-                                                <li><a href="#">Driveshafts</a></li>
-                                                <li><a href="#">Emergency Brake</a></li>
-                                                <li><a href="#">Spools</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="cat-item"><a href="#">Perfomance Filters</a></li>
-                                        <li class="cat-item has-children">
-                                            <a href="#">Cookbooks</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="#">Brake Tools</a></li>
-                                                <li><a href="#">Driveshafts</a></li>
-                                                <li><a href="#">Emergency Brake</a></li>
-                                                <li><a href="#">Spools</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="cat-item "><a href="#">Accessories</a></li>
-                                        <li class="cat-item "><a href="#">Education</a></li>
-                                        <li class="cat-item hidden-menu-item"><a href="#">Indoor Living</a></li>
-                                        <li class="cat-item">
-                                            <a href="#" class="js-expand-hidden-menu">
-                                                More
-                                                Categories
-                                            </a>
-                                        </li>
+                                        @foreach (var item in layoutService.GetGenres())
+                                        {
+                                            <li class="cat-item "><a href="#">@item.Name</a></li>
+                                        }
                                     </ul>
                                 </div>
                             </nav>
@@ -329,8 +223,17 @@
                             <div class="main-navigation flex-lg-right">
                                 <div class="cart-widget">
                                     <div class="login-block">
-                                        <a href="login" class="font-weight-bold">@(User.Identity.IsAuthenticated ? User.Identity.Name : "Login")</a> <br>
-                                        <a href="register">@(User.Identity.IsAuthenticated ? "" : "or Register")</a>
+                                        @if (User.Identity.IsAuthenticated )
+                                        {
+                                            <a asp-action="profile" asp-controller="account" class="font-weight-bold">@User.Identity.Name</a> <br>
+                                            <a asp-action="logout" asp-controller="account">Log out</a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="login" asp-controller="account" class="font-weight-bold">Login</a> <br>
+                                            <span>or</span>
+                                            <a asp-action="register" asp-controller="account">Register</a>
+                                        }
                                     </div>
                                     <div class="cart-block">
                                         <div class="cart-total">
@@ -999,6 +902,8 @@
     <script src="~/assets/js/plugins.js"></script>
     <script src="~/assets/js/ajax-mail.js"></script>
     <script src="~/assets/js/custom.js"></script>
+
+    @RenderSection("scripts", required: false)
     <script src="~/assets/js/main.js"></script>
 
 

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MVC_Pustok.Areas.Admin.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin,super_admin")]
     [Area("admin")]
     public class DashboardController : Controller
     {

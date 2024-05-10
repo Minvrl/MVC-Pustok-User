@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVC_Pustok.Areas.Admin.ViewModels;
 using MVC_Pustok.Data;
 using MVC_Pustok.Models;
 using MVC_Pustok.ViewModels;
+using System.Drawing;
+using System.Security.Claims;
 
 namespace MVC_Pustok.Controllers
 {
@@ -38,24 +41,104 @@ namespace MVC_Pustok.Controllers
 
             if (!r.Succeeded)
             {
-                foreach (var eror in r.Errors)
+                foreach (var err in r.Errors)
                 {
-                    ModelState.AddModelError("", eror.Description);
+                    if (err.Code == "DuplicateUserName")
+                        ModelState.AddModelError("UserName", "UserName is already taken");
+                    else ModelState.AddModelError("", err.Description);
                 }
                 return View();
             }
+
+            await _userManager.AddToRoleAsync(user, "member");
             return RedirectToAction("index", "home");
 
         }
 
-        public IActionResult Profile()
+        [Authorize(Roles = "member")]
+        public async Task<IActionResult> Logout()
         {
-            AppUser user = _context.AppUsers.ToList().FirstOrDefault(x=> x.UserName != "mimy");
-
-			if (user == null) return RedirectToAction("notfound", "error");
-			return View(user);
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("index", "home");
         }
 
+        [Authorize(Roles = "member")]
+        public async Task<IActionResult> Profile(string tab = "dashboard")
+        {
+            AppUser? user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("login", "account");
+            }
+            ProfileViewModel pvm = new ProfileViewModel 
+            {
+                ProfEditVM = new ProfileEditViewModel 
+                {
+                    FullName = user.FullName,
+                    Email = user.Email,
+                    UserName = user.UserName
+                }
+            };
+            ViewBag.Tab = tab;
+            return View(pvm);
+
+        }
+
+        [Authorize(Roles = "member")]
+        [HttpPost]
+        public async Task<IActionResult> Profile(ProfileEditViewModel pEditVM, string tab = "profile")
+        {
+            ViewBag.Tab = tab;
+            ProfileViewModel profileVM = new ProfileViewModel();
+            profileVM.ProfEditVM = pEditVM;
+
+            if (!ModelState.IsValid) return View(profileVM);
+
+            AppUser? user = await _userManager.GetUserAsync(User);
+
+            if (user == null) return RedirectToAction("login", "account");
+
+            user.UserName = pEditVM.UserName;
+            user.Email = pEditVM.Email;
+            user.FullName = pEditVM.FullName;
+
+            if (_userManager.Users.Any(x => x.Id != User.FindFirstValue(ClaimTypes.NameIdentifier) && x.NormalizedEmail == pEditVM.Email.ToUpper()))
+            {
+                ModelState.AddModelError("Email", "Email is already taken");
+                return View(profileVM);
+            }
+
+            if (pEditVM.NewPassword != null)
+            {
+                var passwordResult = await _userManager.ChangePasswordAsync(user, pEditVM.CurrentPassword, pEditVM.NewPassword);
+
+                if (!passwordResult.Succeeded)
+                {
+                    foreach (var err in passwordResult.Errors)
+                        ModelState.AddModelError("", err.Description);
+
+                    return View(profileVM);
+                }
+            }
+
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                foreach (var err in result.Errors)
+                {
+                    if (err.Code == "DuplicateUserName")
+                        ModelState.AddModelError("UserName", "UserName is already taken");
+                    else ModelState.AddModelError("", err.Description);
+                }
+                return View(profileVM);
+            }
+
+            await _signInManager.SignInAsync(user, false);
+
+            return View(profileVM);
+        }
         public IActionResult Login()
         {
             return View();

@@ -10,23 +10,15 @@ namespace MVC_Pustok.Areas.Admin.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
-        public async Task<IActionResult> CreateAdmin()
-        {
-            AppUser admin = new AppUser
-            {
-                UserName = "mimy",
-            };
-
-            var result = await _userManager.CreateAsync(admin, "mimy11mimy");
-
-            return Json(result);
-        }
+       
         public IActionResult Login()
         {
             return View();
@@ -58,5 +50,31 @@ namespace MVC_Pustok.Areas.Admin.Controllers
             var username = User.Identity.Name;
             return Json(User.Identity);
         }
+
+        public async Task<IActionResult> CreateRoles()
+        {
+            await _roleManager.CreateAsync(new IdentityRole("admin"));
+            await _roleManager.CreateAsync(new IdentityRole("super_admin"));
+            await _roleManager.CreateAsync(new IdentityRole("member"));
+            return Ok();
+
+        }
+
+        public async Task<IActionResult> CreateAdmin()
+        {
+            AppUser admin = new AppUser
+            {
+                UserName = "mimy",
+                Email = "mimy"
+            };
+
+            var r = await _userManager.CreateAsync(admin, "mimmi111");
+            await _userManager.AddToRoleAsync(admin, "super_admin");
+
+            return Json(r);
+        }
+
     }
 }
+
+

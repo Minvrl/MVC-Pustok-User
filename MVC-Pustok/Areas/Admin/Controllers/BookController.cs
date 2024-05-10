@@ -8,7 +8,7 @@ using MVC_Pustok.Models;
 
 namespace MVC_Pustok.Areas.Admin.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin,super_admin")]
     [Area("admin")]
     public class BookController : Controller
 

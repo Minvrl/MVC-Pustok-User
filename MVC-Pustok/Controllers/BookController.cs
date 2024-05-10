@@ -7,7 +7,6 @@ using MVC_Pustok.Models;
 
 namespace MVC_Pustok.Controllers
 {
-    [Authorize]
     public class BookController:Controller
     {
         private AppDbContext _context;

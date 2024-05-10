@@ -8,7 +8,6 @@ using System.Diagnostics;
 
 namespace MVC_Pustok.Controllers
 {
-	[Authorize]
 	public class HomeController : Controller
     {
         private AppDbContext _context;
