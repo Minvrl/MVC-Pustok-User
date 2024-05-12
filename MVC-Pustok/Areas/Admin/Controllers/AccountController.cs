@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVC_Pustok.Areas.Admin.ViewModels;
 using MVC_Pustok.Models;
@@ -72,6 +73,13 @@ namespace MVC_Pustok.Areas.Admin.Controllers
             await _userManager.AddToRoleAsync(admin, "super_admin");
 
             return Json(r);
+        }
+
+        [Authorize(Roles = "admin,super_admin")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("login", "account");
         }
 
     }
