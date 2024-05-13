@@ -5,6 +5,7 @@ using MVC_Pustok.Areas.Admin.Helpers;
 using MVC_Pustok.Areas.Admin.ViewModels;
 using MVC_Pustok.Data;
 using MVC_Pustok.Models;
+using MVC_Pustok.Models.Enum;
 
 namespace MVC_Pustok.Areas.Admin.Controllers
 {
@@ -23,7 +24,7 @@ namespace MVC_Pustok.Areas.Admin.Controllers
         }
         public IActionResult Index(int page = 1)
         {
-            var query = _context.Books.Include(x => x.Author).Include(x => x.Genre).Include(x => x.BookImages.Where(x => x.PosterStatus == true)).OrderByDescending(x => x.Id);
+            var query = _context.Books.Include(x => x.Author).Include(x => x.Genre).Include(x=> x.BookReviews).Include(x => x.BookImages.Where(x => x.PosterStatus == true)).OrderByDescending(x => x.Id);
 
             return View(PaginatedList<Book>.Create(query, page, 2));
         }
@@ -220,6 +221,32 @@ namespace MVC_Pustok.Areas.Admin.Controllers
 
             return RedirectToAction("index");
         }
+
+        public IActionResult Reviews(int id,int page =1)
+        {
+            var query = _context.BookReviews.Include(x=>x.Book).Include(x => x.AppUser).Where(x=> x.BookId == id)
+                .OrderByDescending(x => x.CreatedAt);
+
+            return View(PaginatedList<BookReview>.Create(query, page, 2));
+        }
+
+        [HttpPost]
+        public IActionResult UpdateStatus(int id, ReviewStatus status)
+        {
+            var review = _context.BookReviews.Find(id);
+
+            if (review == null)
+            {
+                return NotFound();
+            }
+
+            review.Status = status; 
+
+            _context.SaveChanges();
+
+            return RedirectToAction("index","book");
+        }
+
 
     }
 }

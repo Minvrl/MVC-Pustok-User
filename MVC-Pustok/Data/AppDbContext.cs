@@ -24,6 +24,7 @@ namespace MVC_Pustok.Data
         public DbSet<Tag> Tags { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
 
+        public DbSet<BookReview> BookReviews { get; set; }  
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
